@@ -1,39 +1,47 @@
 const router = require("express").Router();
 
-//User Registration
-router.post('/resgister-user', async (req, res)=>{
+//Bring the user regitration function
+const { userRegister } = require("../utils/Auth");
 
+//User Registration
+router.post('/register-user', async (req, res) => {
+    await userRegister(req.body, "user", res);
 });
 //Admin Registration Mode
-router.post('/resgister-admin', async (req, res)=>{
-    
+router.post('/register-admin', async (req, res) => {
+    await userRegister(req.body, "admin", res);
 });
 //Super Admin Registration Mode
-router.post('/resgister-super-admin', async (req, res)=>{
-    
+router.post('/register-super-admin', async (req, res) => {
+    await userRegister(req.body, "superadmin", res);
 });
 //User Login
-router.post('/login-user', async (req, res)=>{
+router.post('/login-user', async (req, res) => {
 
 });
 //Admin Login Mode
-router.post('/login-admin', async (req, res)=>{
-    
+router.post('/login-admin', async (req, res) => {
+
 });
 //Super Admin Login Mode
-router.post('/login-super-admin', async (req, res)=>{
-    
+router.post('/login-super-admin', async (req, res) => {
+
 });
+//Profile route
+router.get('/profile', async (req, res) => {
+
+});
+
 //User Protected
-router.post('/user-profile', async (req, res)=>{
+router.post('/user-protected', async (req, res) => {
 
 });
 //Admin Protected Mode
-router.post('/admin-profile', async (req, res)=>{
-    
+router.post('/admin-protected', async (req, res) => {
+
 });
 //Super Admin Protected Mode
-router.post('/super-admin-profile', async (req, res)=>{
-    
+router.post('/super-admin-protected', async (req, res) => {
+
 });
 module.exports = router;
