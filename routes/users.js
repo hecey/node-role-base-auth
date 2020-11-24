@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 //Bring the user regitration function
-const { userRegister } = require("../utils/Auth");
+const { userLogin, userRegister } = require("../utils/Auth");
 
 //User Registration
 router.post('/register-user', async (req, res) => {
@@ -17,15 +17,15 @@ router.post('/register-super-admin', async (req, res) => {
 });
 //User Login
 router.post('/login-user', async (req, res) => {
-
+    await userLogin(req.body, "user", res);
 });
 //Admin Login Mode
 router.post('/login-admin', async (req, res) => {
-
+    await userLogin(req.body, "admin", res);
 });
 //Super Admin Login Mode
 router.post('/login-super-admin', async (req, res) => {
-
+    await userLogin(req.body, "superadmin", res);
 });
 //Profile route
 router.get('/profile', async (req, res) => {
