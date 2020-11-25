@@ -1,9 +1,10 @@
 const User = require("../models/User");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { use } = require("passport");
+const passport = require("passport");
 
 const { SECRET } = require("../config");
+const { use } = require("passport");
 
 /*
 * @Desc to register an User = (Admin, Super User, User)
@@ -56,8 +57,8 @@ const userRegister = async (userDetails, role, res) => {
 */
 const userLogin = async (userCredenditals, role, res) => {
     let { username, password } = userCredenditals;
-    const user = await User.findOne({ username:username });
-    
+    const user = await User.findOne({ username: username });
+
     //Check username in Database
     if (!user) {
         return res.status(404).json({
@@ -107,17 +108,47 @@ const userLogin = async (userCredenditals, role, res) => {
     }
 };
 
+/**
+ * @DESC Passport middleware
+ */
+const userAuth = passport.authenticate("jwt", { session: false });
+
+
+/**
+ * @DESC Check role middleware
+ */
+const checkRole = roles => (req, res, next) =>
+    roles.includes(req.user.role)
+        ? next()
+        : res.status(401).json({ message: "Unathorize", success: false });
+
+
 const checkValidateUserName = async username => {
     let user = await User.findOne({ username });
 
     return user ? false : true;
-}
+};
+
 const checkValidateEmail = async email => {
     let user = await User.findOne({ email });
     return user ? false : true;
 }
 
+const serializeUser = user => {
+    return {
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        _id: user._id,
+        updatedAt: user.updatedAt,
+        createdAt: user.createdAt
+    }
+};
+
 module.exports = {
+    userAuth,
     userLogin,
-    userRegister
+    userRegister,
+    serializeUser,
+    checkRole
 };
